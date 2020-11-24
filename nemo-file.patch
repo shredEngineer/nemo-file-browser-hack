@@ -1,0 +1,23 @@
+--- nemo-file.c	2020-11-24 20:55:45.459282000 +0100
++++ nemo-file-hack.c	2020-11-24 21:05:57.429637347 +0100
+@@ -3038,6 +3038,9 @@
+ 	name_1 = nemo_file_peek_display_name (file_1);
+ 	name_2 = nemo_file_peek_display_name (file_2);
+ 
++	gboolean sort_first_1 = name_1 && (name_1[0] == '_');
++	gboolean sort_first_2 = name_2 && (name_2[0] == '_');
++
+ 	sort_last_1 = name_1 && (name_1[0] == SORT_LAST_CHAR1 || name_1[0] == SORT_LAST_CHAR2);
+ 	sort_last_2 = name_2 && (name_2[0] == SORT_LAST_CHAR1 || name_2[0] == SORT_LAST_CHAR2);
+ 
+@@ -3045,6 +3048,10 @@
+ 		compare = +1;
+ 	} else if (!sort_last_1 && sort_last_2) {
+ 		compare = -1;
++	} else if (sort_first_1 && !sort_first_2) {
++		compare = -1;
++	} else if (!sort_first_1 && sort_first_2) {
++		compare = +1;
+ 	} else if (name_1 == NULL || name_2 == NULL) {
+         if (name_1 && !name_2)
+             compare = +1;
